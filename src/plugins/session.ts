@@ -1,8 +1,8 @@
-import fp from 'fastify-plugin';
 import fastifyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';
 import { RedisStore } from 'connect-redis';
-import { env } from '../config/env.js';
+import fp from 'fastify-plugin';
+import { env } from '@/config/env.js';
 
 declare module 'fastify' {
   interface Session {
@@ -15,6 +15,7 @@ export default fp(async (app) => {
 
   await app.register(fastifySession, {
     secret: env.SESSION_SECRET,
+    rolling: true,
     store: new RedisStore({ client: app.redis, prefix: 'sess:' }),
     cookie: {
       httpOnly: true,

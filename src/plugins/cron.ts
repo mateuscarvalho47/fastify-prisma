@@ -1,5 +1,5 @@
-import fp from 'fastify-plugin';
 import { Cron } from 'croner';
+import fp from 'fastify-plugin';
 
 export default fp(async (app) => {
   const jobs: Cron[] = [];
@@ -11,6 +11,6 @@ export default fp(async (app) => {
   );
 
   app.addHook('onClose', async () => {
-    jobs.forEach((j) => j.stop());
+    for (const j of jobs) j.stop();
   });
 });

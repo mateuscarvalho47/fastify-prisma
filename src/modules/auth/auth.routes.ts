@@ -1,14 +1,15 @@
+import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { registerSchema, loginSchema } from './auth.schema.js';
-import { FastifyInstance } from 'fastify';
-import { UserRepository } from '../user/user.repository.js';
-import { UserService } from '../user/user.service.js';
-import { AuthService } from './auth.service.js';
+import { requireAuth } from '@/lib/requireAuth.js';
+import { UserRepository } from '@/modules/user/user.repository.js';
+import { UserService } from '@/modules/user/user.service.js';
 import { AuthController } from './auth.controller.js';
+import { loginSchema, registerSchema } from './auth.schema.js';
+import { AuthService } from './auth.service.js';
 
 const userResponse = z.object({
   id: z.string(),
-  email: z.string().email(),
+  email: z.email(),
   createdAt: z.date(),
 });
 
@@ -34,7 +35,9 @@ export async function authRoutes(app: FastifyInstance) {
       summary: 'Login',
       body: loginSchema,
       response: {
-        200: z.object({ user: z.object({ id: z.string(), email: z.string() }) }),
+        200: z.object({
+          user: z.object({ id: z.string(), email: z.string() }),
+        }),
       },
     },
     handler: controller.login,
@@ -52,6 +55,7 @@ export async function authRoutes(app: FastifyInstance) {
       security: [{ sessionCookie: [] }],
       response: { 200: userResponse },
     },
+    preHandler: requireAuth,
     handler: controller.me,
   });
 }

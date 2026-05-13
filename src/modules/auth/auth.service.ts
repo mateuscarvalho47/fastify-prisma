@@ -1,7 +1,7 @@
-import type { UserRepository } from '../user/user.repository.js';
-import { hashPassword, verifyPassword } from '../../lib/hash.js';
+import { hashPassword, verifyPassword } from '@/lib/hash.js';
+import type { UserRepository } from '@/modules/user/user.repository.js';
 import { EmailAlreadyTakenError, InvalidCredentialsError } from './auth.errors.js';
-import type { RegisterInput, LoginInput } from './auth.schema.js';
+import type { LoginInput, RegisterInput } from './auth.schema.js';
 
 export class AuthService {
   constructor(private users: UserRepository) {}
@@ -15,7 +15,7 @@ export class AuthService {
   }
 
   async login(input: LoginInput) {
-    const user = await this.users.findByEmail(input.email);
+    const user = await this.users.findByEmailWithHash(input.email);
     if (!user) throw new InvalidCredentialsError();
 
     const ok = await verifyPassword(user.passwordHash, input.password);

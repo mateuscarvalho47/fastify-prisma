@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin';
 import { ZodError, z } from 'zod';
-import { AppError, ValidationError } from '../lib/errors.js';
+import { AppError, ValidationError } from '@/lib/errors.js';
 
 export default fp(async (app) => {
   app.setErrorHandler((err, req, reply) => {

@@ -1,4 +1,4 @@
-import { NotFoundError } from '../../lib/errors.js';
+import { NotFoundError } from '@/lib/errors.js';
 import type { UserRepository } from './user.repository.js';
 
 export class UserService {

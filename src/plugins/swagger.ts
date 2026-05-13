@@ -1,8 +1,8 @@
-import fp from 'fastify-plugin';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
+import fp from 'fastify-plugin';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
-import { env } from '../config/env.js';
+import { env } from '@/config/env.js';
 
 export default fp(async (app) => {
   if (env.NODE_ENV === 'production') return;
